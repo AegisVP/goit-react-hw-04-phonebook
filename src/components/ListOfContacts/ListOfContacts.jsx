@@ -9,8 +9,7 @@ import {
 } from 'components/ListOfContacts/ListOfContacts.styled';
 import { PropTypes } from 'prop-types';
 
-// export const ListOfContacts = ({ onDeleteContact, onEditContact, contacts, children }) => {
-export const ListOfContacts = ({ onDeleteContact, onEditContact, contacts }) => {
+export const ListOfContacts = ({ formikSelected, onDeleteContact, onEditContact, contacts }) => {
   return (
     <List>
       {contacts.length > 0
@@ -21,13 +20,15 @@ export const ListOfContacts = ({ onDeleteContact, onEditContact, contacts }) => 
                 <Number className="number">{contact.number}</Number>
               </Box>
               <Box>
-                <Button
-                  onClick={() => {
-                    onEditContact(contact.id);
-                  }}
-                >
-                  ✏️
-                </Button>
+                {!formikSelected && (
+                  <Button
+                    onClick={() => {
+                      onEditContact(contact.id);
+                    }}
+                  >
+                    ✏️
+                  </Button>
+                )}
                 <Button
                   onClick={() => {
                     onDeleteContact(contact.id);

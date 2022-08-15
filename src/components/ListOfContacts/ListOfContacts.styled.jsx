@@ -21,9 +21,9 @@ export const ListItem = styled.li`
   border: 1px solid #000000;
   border-radius: 5px;
 
-  :hover .number {
+  /* :hover .number {
     display: flex;
-  }
+  } */
 `;
 
 export const Name = styled.p`
@@ -40,6 +40,6 @@ export const Name = styled.p`
 `;
 
 export const Number = styled.p`
-  display: none;
+  display: flex;
   margin: 0 0 0 40px;
 `;

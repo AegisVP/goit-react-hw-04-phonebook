@@ -27,7 +27,9 @@ export const ContactForm = ({ editId, editName, editNumber, onSubmit, onResetFor
   const contactSubmitHandler = e => {
     e.preventDefault();
     const { id, name, number } = e.target.elements;
-    if (onSubmit({ id: id.value, name: name.value, number: number.value })) setInitialValues();
+    const userAddedSuccessfully = onSubmit({ id: id.value, name: name.value, number: number.value });
+    
+    if (userAddedSuccessfully) setInitialValues();
   };
 
   const onResetLocalForm = () => {
