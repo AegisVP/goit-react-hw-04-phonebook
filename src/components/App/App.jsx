@@ -8,7 +8,6 @@ import { ContactFormFormik } from 'components/ContactFormFormik/ContactFormFormi
 import { ListOfContacts } from 'components/ListOfContacts/ListOfContacts';
 import { FilterForm } from 'components/Filter/Filter';
 import { FormikSelect } from 'components/FormikSelect/FormikSelect';
-import log from 'components/Common/log';
 
 const LS_CONTACTS_KEY = 'hw_contacts_phonebook';
 const LS_IS_FORMIK_SELECTED = 'hw_contacts_isFormikSelected';
@@ -30,9 +29,7 @@ export const App = () => {
 
   useEffect(() => {
     const savedContacts = localStorage.getItem(LS_CONTACTS_KEY);
-    log('useEffect[]: savedContacts=', savedContacts);
     const parsedContacts = savedContacts ? JSON.parse(savedContacts) : exampleContacts;
-    log('useEffect[]: parsedContacts=', parsedContacts);
     const isFormikSelected = localStorage.getItem(LS_IS_FORMIK_SELECTED)?.toString().toLocaleLowerCase === 'true';
 
     setContacts(parsedContacts);
@@ -40,8 +37,6 @@ export const App = () => {
   }, []);
 
   useEffect(() => {
-    log('useEffect[contacts]: setting localStorage contacts');
-    log('useEffect[contacts]: contacts:', contacts);
     localStorage.setItem(LS_CONTACTS_KEY, JSON.stringify(contacts));
   }, [contacts]);
 
@@ -51,24 +46,19 @@ export const App = () => {
   };
 
   const onAddContact = ({ id, name, number }) => {
-    log(`onAddContact: id:${id}, name:${name}, number:${number}`);
     name = name.trim();
     const normalizedName = name.toLocaleLowerCase();
 
     if (id !== '' && id !== null) {
-      log('onAddContact: id not empty, deleting');
       onDeleteContact(id);
     } else {
-      log('onAddContact: id empty');
       if (contacts.some(({ name }) => name.toLocaleLowerCase() === normalizedName)) {
-        log('onAddContact: name exists, aborting');
         window.alert('This name already exists in the list!');
         return;
       }
     }
 
     id ||= nanoid();
-    log('onAddContact: setting new id:', id);
     onSaveContact({ id, name, number });
     return id;
   };
@@ -85,9 +75,7 @@ export const App = () => {
   };
 
   const onSaveContact = ({ id, name, number }) => {
-    log(`onSaveContact: id:${id}, name:${name}, number:${number}`);
     setContacts(pC => [...pC, { id, name, number }]);
-
     setEditInfo({ editId: '', editName: '', editNumber: '' });
   };
 
@@ -96,20 +84,8 @@ export const App = () => {
   };
 
   const onDeleteContact = id => {
-    log(`onDeleteContact: id:${id}`);
-    log(`onDeleteContact: contacts.length before: ${contacts.length}`);
     if (contacts.length === 1) clearFilterField();
-    const tempArr = contacts;
-    log('onDeleteContact: after filter', tempArr);
-
-    setContacts(pC =>
-      pC.filter(contact => {
-        log('onDeleteContact.contacts.filter: contact:', contact);
-        log('onDeleteContact.contacts.filter: contact.id:', contact.id, ', id:', id);
-        return contact.id !== id;
-      })
-    );
-    log(`onDeleteContact: contacts.length after: ${contacts.length}`);
+    setContacts(pC => pC.filter(contact => contact.id !== id));
   };
 
   const onFilterContacts = ({ currentTarget: { value } }) => {
